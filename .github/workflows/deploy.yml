@@ -43,29 +43,14 @@ jobs:
             docker --version
           fi
 
-      - name: Build and push Docker image
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.ACCESS_TOKEN }}
+      - name: Verify Docker image builds correctly
         run: |
-          # Build the image
+          # Build the image locally to verify it works
           docker build -t for-devops:${{ github.sha }} .
           echo "Docker image built successfully"
           
-          # Tag for Docker Hub
-          docker tag for-devops:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/for-devops:${{ github.sha }}
-          docker tag for-devops:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/for-devops:latest
-          
-          # Login to Docker Hub
-          echo "${{ secrets.ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          
-          # Push to Docker Hub
-          docker push ${{ secrets.DOCKER_USERNAME }}/for-devops:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/for-devops:latest
-          
-          # Output the public URL
-          echo "Image URL: docker.io/${{ secrets.DOCKER_USERNAME }}/for-devops:${{ github.sha }}"
-          echo "Latest Image URL: docker.io/${{ secrets.DOCKER_USERNAME }}/for-devops:latest"
+          # List the image
+          docker images | grep for-devops
 
       - name: Deploy to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
