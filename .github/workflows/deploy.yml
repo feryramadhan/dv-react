@@ -57,7 +57,8 @@ jobs:
           script: |
             # Create deployment directory if it doesn't exist
             mkdir -p ~/app-deploy
-            # Clean up previous deployment files
+
+            # Clean up all artifacts
             rm -rf ~/app-deploy/*
 
       - name: Copy files to EC2
