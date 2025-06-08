@@ -33,6 +33,9 @@ jobs:
           # Create the tar archive in the temporary directory
           tar -czf /tmp/deployment/deploy.tar.gz --exclude='node_modules' --exclude='.git' .
 
+      - name: List files to copy
+        run: ls -la /tmp/deployment
+
       - name: Upload deployment package
         uses: actions/upload-artifact@v4
         with:
@@ -62,9 +65,6 @@ jobs:
             
             # Clean up previous deployment files
             rm -rf ~/app-deploy/*
-
-      - name: List files to copy
-        run: ls -la /tmp/deployment
           
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
