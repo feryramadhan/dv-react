@@ -82,15 +82,15 @@ jobs:
             tar -xzf deploy.tar.gz
 
             # Build Docker image using our existing Dockerfile
-            docker build -t react-vite-app:latest .
+            sudo docker build -t react-vite-app:latest .
 
             # Stop and remove any existing container
-            docker stop react-container || true
-            docker rm react-container || true
+            sudo docker stop react-container || true
+            sudo docker rm react-container || true
 
             # Run new container
             # Note: We're mapping port 80 to 3000 for external access
-            docker run -d --name react-container -p 80:3000 react-vite-app:latest
+            sudo docker run -d --name react-container -p 80:3000 react-vite-app:latest
 
             # Clean up unused images
-            docker image prune -af
+            sudo docker image prune -af
