@@ -27,13 +27,17 @@ jobs:
           CI: true
 
       - name: Create deployment package
-        run: tar -czf deploy.tar.gz --exclude='node_modules' --exclude='.git' .
+        run: |
+          # Create a temporary directory for the tar archive
+          mkdir -p /tmp/deployment
+          # Create the tar archive in the temporary directory
+          tar -czf /tmp/deployment/deploy.tar.gz --exclude='node_modules' --exclude='.git' .
 
       - name: Upload deployment package
         uses: actions/upload-artifact@v4
         with:
           name: deploy-artifact
-          path: deploy.tar.gz
+          path: /tmp/deployment/deploy.tar.gz
 
   deploy:
     runs-on: ubuntu-latest
@@ -65,7 +69,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.ACCOUNT_ID }}
           key: ${{ secrets.KEY }}
-          source: "deploy.tar.gz"
+          source: "/tmp/deployment/deploy.tar.gz"
           target: "~/app-deploy"
           
       - name: Build and run Docker container on EC2
