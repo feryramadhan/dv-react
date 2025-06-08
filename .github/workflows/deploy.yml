@@ -27,7 +27,7 @@ jobs:
           CI: true
 
       - name: Create deployment package
-        run: tar -czf deploy.tar.gz . --exclude node_modules --exclude .git
+        run: tar -czf deploy.tar.gz --exclude='node_modules' --exclude='.git' .
 
       - name: Upload deployment package
         uses: actions/upload-artifact@v4
